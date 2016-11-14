@@ -122,6 +122,7 @@ public:
 	StringName get_drag_data;
 	StringName can_drop_data;
 	StringName drop_data;
+	StringName drop_data_outside;
 
 	StringName enter_screen;
 	StringName exit_screen;

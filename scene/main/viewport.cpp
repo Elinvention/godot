@@ -1869,8 +1869,12 @@ void Viewport::_gui_input_event(InputEvent p_event) {
 				if (gui.drag_data.get_type()!=Variant::NIL && p_event.mouse_button.button_index==BUTTON_LEFT) {
 
 					//alternate drop use (when using force_drag(), as proposed by #5342
-					if (gui.mouse_focus && gui.mouse_focus->can_drop_data(pos,gui.drag_data)) {
-						gui.mouse_focus->drop_data(pos,gui.drag_data);
+					if (gui.mouse_focus) {
+						if (gui.mouse_focus->can_drop_data(pos,gui.drag_data)) {
+							gui.mouse_focus->drop_data(pos,gui.drag_data);
+						} else {
+							gui.mouse_focus->drop_data_outside(pos,gui.drag_data);
+						}
 					}
 
 					gui.drag_data=Variant();
@@ -1899,6 +1903,8 @@ void Viewport::_gui_input_event(InputEvent p_event) {
 						pos = gui.focus_inv_xform.xform(pos);
 						if (gui.mouse_over->can_drop_data(pos,gui.drag_data)) {
 							gui.mouse_over->drop_data(pos,gui.drag_data);
+						} else {
+							gui.mouse_over->drop_data_outside(pos,gui.drag_data);
 						}
 					}
 

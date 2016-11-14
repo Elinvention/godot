@@ -765,6 +765,26 @@ void Control::drop_data(const Point2& p_point,const Variant& p_data){
 			return;
 	}
 }
+void Control::drop_data_outside(const Point2& p_point,const Variant& p_data){
+
+	if (data.drag_owner) {
+		Object *obj = ObjectDB::get_instance(data.drag_owner);
+		if (obj) {
+			Control *c = obj->cast_to<Control>();
+			c->call("drop_data_outside_fw",p_point,p_data,this);
+			return;
+		}
+	}
+
+	if (get_script_instance()) {
+		Variant v=p_point;
+		const Variant *p[2]={&v,&p_data};
+		Variant::CallError ce;
+		Variant ret = get_script_instance()->call(SceneStringNames::get_singleton()->drop_data_outside,p,2,ce);
+		if (ce.error==Variant::CallError::CALL_OK)
+			return;
+	}
+}
 
 void Control::force_drag(const Variant& p_data,Control *p_control) {
 
@@ -2563,6 +2583,7 @@ void Control::_bind_methods() {
 	BIND_VMETHOD(MethodInfo(Variant::OBJECT,"get_drag_data",PropertyInfo(Variant::VECTOR2,"pos")));
 	BIND_VMETHOD(MethodInfo(Variant::BOOL,"can_drop_data",PropertyInfo(Variant::VECTOR2,"pos"),PropertyInfo(Variant::NIL,"data")));
 	BIND_VMETHOD(MethodInfo("drop_data",PropertyInfo(Variant::VECTOR2,"pos"),PropertyInfo(Variant::NIL,"data")));
+	BIND_VMETHOD(MethodInfo("drop_data_outside",PropertyInfo(Variant::VECTOR2,"pos"),PropertyInfo(Variant::NIL,"data")));
 
 	ADD_PROPERTYINZ( PropertyInfo(Variant::INT,"anchor/left", PROPERTY_HINT_ENUM, "Begin,End,Ratio,Center"), _SCS("_set_anchor"),_SCS("get_anchor"), MARGIN_LEFT );
 	ADD_PROPERTYINZ( PropertyInfo(Variant::INT,"anchor/top", PROPERTY_HINT_ENUM, "Begin,End,Ratio,Center"), _SCS("_set_anchor"),_SCS("get_anchor"), MARGIN_TOP );

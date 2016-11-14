@@ -149,6 +149,7 @@ SceneStringNames::SceneStringNames() {
 
 	get_drag_data = StaticCString::create("get_drag_data");
 	drop_data = StaticCString::create("drop_data");
+	drop_data_outside = StaticCString::create("drop_data_outside");
 	can_drop_data = StaticCString::create("can_drop_data");
 
 	_im_update = StaticCString::create("_im_update");

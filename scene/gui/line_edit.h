@@ -132,6 +132,7 @@ public:
 	virtual Variant get_drag_data(const Point2& p_point);
 	virtual bool can_drop_data(const Point2& p_point,const Variant& p_data) const;
 	virtual void drop_data(const Point2& p_point,const Variant& p_data);
+	virtual void drop_data_outside(const Point2& p_point,const Variant& p_data);
 
 	void menu_option(int p_option);
 	PopupMenu *get_menu() const;

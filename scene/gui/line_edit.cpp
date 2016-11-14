@@ -543,7 +543,25 @@ void LineEdit::drop_data(const Point2& p_point,const Variant& p_data){
 		selection.end = cursor_pos;
 	}
 }
+void LineEdit::drop_data_outside(const Point2& p_point,const Variant& p_data){
 
+	if (p_data.get_type()==Variant::STRING) {
+		set_cursor_at_pixel_pos(p_point.x);
+		int selected = selection.end - selection.begin;
+
+		Ref<Font> font = get_font("font");
+		if (font != NULL) {
+			for (int i = selection.begin; i < selection.end; i++)
+				cached_width -= font->get_char_size(text[i]).width;
+		}
+
+		text.erase(selection.begin, selected);
+
+		append_at_cursor(p_data);
+		selection.begin = cursor_pos-selected;
+		selection.end = cursor_pos;
+	}
+}
 
 void LineEdit::_notification(int p_what) {
 
